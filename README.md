@@ -3,7 +3,10 @@ The dataset that is being used is [US Used Cards](https://www.kaggle.com/dataset
 - [data cleaning]()
 
 > [!NOTE]
-> Tests were made in `Linux Ubuntu 22.04`
+> Tests were made with:
+> - `Linux Ubuntu 22.04`
+> - i5-8th
+> - 16GB RAM
 
 ## Requirements
 Before starting reproducing make sure these are installed:
