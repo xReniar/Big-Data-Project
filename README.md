@@ -2,8 +2,21 @@
 The dataset that is being used is [US Used Cards](https://www.kaggle.com/datasets/ananaymital/us-used-cars-dataset) with about 3 million records where each record has 66 columns. Below are listed each step for this assignment:
 - [data cleaning]()
 
-## How to use
-Execute this command in the project directory to download the dataset:
+> [!NOTE]
+> Tests were made in `Linux Ubuntu 22.04`
+
+## Requirements
+Before starting reproducing make sure these are installed:
+- `Spark SQL`: 
+After this create a virtual environment:
 ```bash
-curl -L -o us-used-cars-dataset.zip https://www.kaggle.com/api/v1/datasets/download/ananaymital/us-used-cars-dataset
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt --no-cache-dir
+```
+
+## How to use
+Start by executing `setup.sh`, this will download the dataset:
+```bash
+bash setup.sh
 ```
