@@ -1,8 +1,10 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import count, min, max, avg, collect_set
+import os
 
 
-CSV_PATH = "file:///home/rainer/Code/Big-Data-Project/data/used_cars_data.csv"
+ROOT_DIR = os.getenv("ROOT_DIR")
+CSV_PATH = f"file:///{ROOT_DIR}/data/used_cars_data.csv"
 
 # Inizializzazione Spark
 spark = SparkSession.builder \
