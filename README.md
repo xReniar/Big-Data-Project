@@ -35,6 +35,10 @@ Start by executing `download.sh`, this will download the dataset:
 ```bash
 bash download.sh
 ```
+After this run `local.sh` to start `Hadoop` and `Spark`:
+```bash
+bash local.sh
+```
 
 ## Data cleaning
 ## Job 1
