@@ -1,3 +1,2 @@
 wheel
-pandas
 pyspark==3.5.5
