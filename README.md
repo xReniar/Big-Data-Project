@@ -40,6 +40,7 @@ After this run `local.sh` to start `Hadoop` and `Spark`:
 bash local.sh
 ```
 
+## Data cleaning
 ## Job 1
 ## Job 2
 ## Job 3
