@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 from pyspark.sql import SparkSession
+from pyspark.sql.functions import col
+from pyspark.sql.types import IntegerType, DoubleType
 import os
 
 
@@ -21,6 +23,12 @@ df = spark.read \
         "price",
         "year"
     )
+
+df = df.filter(
+    col("price").rlike("^[0-9]+(\.[0-9]+)?$") &
+    col("year").rlike("^[0-9]{4}$")
+).withColumn("price", col("price").cast(DoubleType())) \
+ .withColumn("year", col("year").cast(IntegerType()))
 
 
 df.coalesce(1).write \
