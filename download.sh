@@ -16,6 +16,7 @@ if [ ! -f "data/data_cleaned.csv" ]; then
         --master local \
         clean_data.py
 
+    # put cleaned dataset in hdfs
     cd data
     rm -rf used_cars_data.csv
     mv part-*.csv data_cleaned.csv
