@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, concat_ws
-from pyspark.sql.types import StringType
+from pyspark.sql.functions import col, concat_ws, round as spark_round, sort_array
 import os
 
 
@@ -36,11 +35,14 @@ GROUP BY make_name, model_name
 model_stats = spark.sql(model_stats_query)
 model_stats.createOrReplaceTempView("model_statistics")
 
+model_stats = model_stats.withColumn("avg_price", spark_round(col("avg_price"), 2))
 model_stats = model_stats.withColumn("years_list", concat_ws(",", col("years_list")))
 
 model_stats.coalesce(1).write \
     .mode("overwrite") \
     .option("header", True) \
     .csv(f"/user/{USER}/spark-sql/job-1")
+
+model_stats.show(n=10)
 
 spark.stop()
