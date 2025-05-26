@@ -31,16 +31,14 @@ pip install -r requirements.txt --no-cache-dir
 # How to use
 This section explain gives a description on what the jobs do and how to execute them.
 
-Start by executing `download.sh`, this will download the dataset:
+To start `Hadoop` use `setup.sh`, to download the data and clean it use `download.sh`:
 ```bash
+source setup.sh
 bash download.sh
 ```
-After this run `local.sh` to start `Hadoop` and `Spark`:
-```bash
-bash local.sh
-```
 
-## Data cleaning
-## Job 1
-## Job 2
-## Job 3
+## Map-Reduce
+
+## Spark Core
+
+## Spark SQL
