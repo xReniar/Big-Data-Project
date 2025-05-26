@@ -2,6 +2,7 @@
 
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col
+from pyspark.sql.types import IntegerType
 import os
 
 
@@ -15,6 +16,29 @@ spark = SparkSession.builder \
 df = spark.read \
     .option("header", True) \
     .csv(f"/user/{USER}/data/data_cleaned.csv") \
-    .select("city", "daysonmarket", "description", "price", "year")
+    .select("city", "daysonmarket", "description", "price", "year", "model_name")
 
-df.printSchema()
+df = df.filter(
+    col("daysonmarket").rlike("^[0-9]+$")
+).withColumn("daysonmarket", col("daysonmarket").cast(IntegerType()))
+
+df.createOrReplaceTempView("dataset")
+
+#df_fasce.groupBy("city", "year", "fascia_prezzo").count().orderBy("city", "year", "fascia_prezzo").show()
+
+model_stats_query = """
+SELECT 
+    city,
+    year,
+    SUM(CASE WHEN price > 50000 THEN 1 ELSE 0 END) AS fascia_alta,
+    SUM(CASE WHEN price >= 20000 AND price <= 50000 THEN 1 ELSE 0 END) AS fascia_media,
+    SUM(CASE WHEN price < 20000 THEN 1 ELSE 0 END) AS fascia_bassa
+FROM dataset
+GROUP BY city, year
+ORDER BY city, year
+"""
+
+model_stats = spark.sql(model_stats_query)
+
+model_stats.show(n=10)
+
