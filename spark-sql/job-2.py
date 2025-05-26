@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, round as spark_round
-from pyspark.sql.types import IntegerType
+from pyspark.sql.functions import col, round as spark_round, concat_ws, array, split
+from pyspark.sql.types import StructType, StructField, StringType, LongType, DoubleType, ArrayType, IntegerType
 import os
 
 
@@ -34,7 +34,8 @@ SELECT
         ELSE 'alto'
     END AS fascia,
     COUNT(*) AS numero_macchine,
-    AVG(daysonmarket) AS avg_daysonmarket
+    AVG(daysonmarket) AS avg_daysonmarket,
+    COLLECT_LIST(description) AS descriptions_list
 FROM dataset
 GROUP BY city, year, 
     CASE 
@@ -45,6 +46,56 @@ GROUP BY city, year,
 """
 
 final_report = spark.sql(query)
-fina = final_report.withColumn("avg_price", spark_round(col("avg_price"), 2))
-final_report.show()
 
+# concatenate all the descriptions and adjust average value
+final_report = final_report \
+    .withColumn("avg_daysonmarket", spark_round(col("avg_daysonmarket"), 2)) \
+    .withColumn("descriptions_list", array(concat_ws(" ", col("descriptions_list"))))
+
+# turn column from array to string and split using space
+final_report = final_report.withColumn("descriptions_list", split(col("descriptions_list")[0], " "))
+
+df_rdd = final_report.select("city", "year", "fascia", "numero_macchine", "avg_daysonmarket", "descriptions_list").rdd
+
+def process_row(row):
+    city = row['city']
+    year = row['year']
+    fascia = row['fascia']
+    numero_macchine = row['numero_macchine']
+    avg_daysonmarket = row['avg_daysonmarket']
+    descriptions:list[str] = row['descriptions_list']
+
+    # count words
+    word_counts = {}
+    for word in descriptions:
+        if len(word) > 0 and word.isalpha():
+            word_counts[word] = word_counts.get(word, 0) + 1
+
+    sorted_words = sorted(word_counts.items(), key=lambda x: (x[1]), reverse=True)
+    top_3 = list(map(lambda x: x[0], sorted_words[:3]))
+
+    return (city, year, fascia, numero_macchine, avg_daysonmarket, top_3)
+
+processed_rdd = df_rdd.map(process_row)
+
+schema = StructType([
+    StructField("city", StringType(), False),
+    StructField("year", StringType(), False),
+    StructField("fascia", StringType(), False),
+    StructField("numero_macchine", LongType(), False),
+    StructField("avg_daysonmarket", DoubleType(), False),
+    StructField("top_3_words", ArrayType(StringType()), False)
+])
+
+final_result_df = spark.createDataFrame(processed_rdd, schema)
+final_result_df = final_result_df.withColumn("top_3_words", concat_ws(",", col("top_3_words")))
+
+final_result_df.show(n = 10)
+
+
+'''
+final_result_df.coalesce(1).write \
+    .mode("overwrite") \
+    .option("header", True) \
+    .csv(f"/user/{USER}/spark-sql/job-2")
+'''
