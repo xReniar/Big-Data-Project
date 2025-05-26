@@ -35,8 +35,9 @@ GROUP BY make_name, model_name
 model_stats = spark.sql(model_stats_query)
 model_stats.createOrReplaceTempView("model_statistics")
 
-model_stats = model_stats.withColumn("avg_price", spark_round(col("avg_price"), 2))
-model_stats = model_stats.withColumn("years_list", concat_ws(",", col("years_list")))
+model_stats = model_stats \
+    .withColumn("avg_price", spark_round(col("avg_price"), 2)) \
+    .withColumn("years_list", concat_ws(",", col("years_list")))
 
 model_stats.coalesce(1).write \
     .mode("overwrite") \
