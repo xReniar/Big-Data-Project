@@ -31,10 +31,14 @@ pip install -r requirements.txt --no-cache-dir
 # How to use
 This section explain gives a description on what the jobs do and how to execute them.
 
-To start `Hadoop` use `setup.sh`, to download the data and clean it use `download.sh`:
+To start `Hadoop` use `setup.sh`:
 ```bash
 source setup.sh
-bash download.sh
+```
+Then download dataset using `data.sh`, this will put the cleaned dataset in HDFS and generate portions:
+```bash
+cd dataset
+bash data.sh
 ```
 
 ## Map-Reduce
