@@ -26,19 +26,21 @@ df.createOrReplaceTempView("dataset")
 
 #df_fasce.groupBy("city", "year", "fascia_prezzo").count().orderBy("city", "year", "fascia_prezzo").show()
 
-model_stats_query = """
+query_completa = """
 SELECT 
     city,
     year,
-    SUM(CASE WHEN price > 50000 THEN 1 ELSE 0 END) AS fascia_alta,
-    SUM(CASE WHEN price >= 20000 AND price <= 50000 THEN 1 ELSE 0 END) AS fascia_media,
-    SUM(CASE WHEN price < 20000 THEN 1 ELSE 0 END) AS fascia_bassa
+    SUM(CASE WHEN price > 50000 THEN 1 ELSE 0 END) AS num_fascia_alta,
+    ROUND(AVG(CASE WHEN price > 50000 THEN daysonmarket ELSE NULL END), 2) AS giorni_fascia_alta,
+    SUM(CASE WHEN price >= 20000 AND price <= 50000 THEN 1 ELSE 0 END) AS num_fascia_media,
+    ROUND(AVG(CASE WHEN price >= 20000 AND price <= 50000 THEN daysonmarket ELSE NULL END), 2) AS giorni_fascia_media,
+    SUM(CASE WHEN price < 20000 THEN 1 ELSE 0 END) AS num_fascia_bassa,
+    ROUND(AVG(CASE WHEN price < 20000 THEN daysonmarket ELSE NULL END), 2) AS giorni_fascia_bassa
 FROM dataset
 GROUP BY city, year
 ORDER BY city, year
 """
 
-model_stats = spark.sql(model_stats_query)
-
-model_stats.show(n=10)
+final_report = spark.sql(query_completa)
+final_report.show()
 
