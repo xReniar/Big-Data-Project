@@ -24,8 +24,6 @@ df = df.filter(
 
 df.createOrReplaceTempView("dataset")
 
-#df_fasce.groupBy("city", "year", "fascia_prezzo").count().orderBy("city", "year", "fascia_prezzo").show()
-
 query_completa = """
 SELECT 
     city,
