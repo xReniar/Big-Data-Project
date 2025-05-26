@@ -20,7 +20,7 @@ clean_udf = udf(clean_value, StringType())
 
 df = spark.read \
     .option("header", True) \
-    .csv(f"file://{ROOT_DIR}/data/used_cars_data.csv") \
+    .csv(f"file://{ROOT_DIR}/dataset/data/used_cars_data.csv") \
     .select(
         "city",
         "daysonmarket",
@@ -46,6 +46,6 @@ df = df.filter(
 df.coalesce(1).write \
     .option("header", True) \
     .mode("append") \
-    .csv(f"file://{ROOT_DIR}/data")
+    .csv(f"file://{ROOT_DIR}/dataset/data")
 
 spark.stop()
