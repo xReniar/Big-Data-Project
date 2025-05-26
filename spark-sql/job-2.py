@@ -90,12 +90,12 @@ schema = StructType([
 final_result_df = spark.createDataFrame(processed_rdd, schema)
 final_result_df = final_result_df.withColumn("top_3_words", concat_ws(",", col("top_3_words")))
 
-final_result_df.show(n = 10)
-
-
 '''
 final_result_df.coalesce(1).write \
     .mode("overwrite") \
     .option("header", True) \
     .csv(f"/user/{USER}/spark-sql/job-2")
 '''
+
+final_result_df.show(n = 10)
+spark.stop()
