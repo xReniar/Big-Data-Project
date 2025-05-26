@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col
+from pyspark.sql.functions import col, round as spark_round
 from pyspark.sql.types import IntegerType
 import os
 
@@ -10,7 +10,7 @@ USER = os.getenv("USER")
 
 spark = SparkSession.builder \
     .config("spark.driver.host", "localhost") \
-    .appName("job-2") \
+    .appName("spark-sql#job-2") \
     .getOrCreate()
 
 df = spark.read \
@@ -24,21 +24,27 @@ df = df.filter(
 
 df.createOrReplaceTempView("dataset")
 
-query_completa = """
+query = """
 SELECT 
-    city,
-    year,
-    SUM(CASE WHEN price > 50000 THEN 1 ELSE 0 END) AS num_fascia_alta,
-    ROUND(AVG(CASE WHEN price > 50000 THEN daysonmarket ELSE NULL END), 2) AS giorni_fascia_alta,
-    SUM(CASE WHEN price >= 20000 AND price <= 50000 THEN 1 ELSE 0 END) AS num_fascia_media,
-    ROUND(AVG(CASE WHEN price >= 20000 AND price <= 50000 THEN daysonmarket ELSE NULL END), 2) AS giorni_fascia_media,
-    SUM(CASE WHEN price < 20000 THEN 1 ELSE 0 END) AS num_fascia_bassa,
-    ROUND(AVG(CASE WHEN price < 20000 THEN daysonmarket ELSE NULL END), 2) AS giorni_fascia_bassa
+    city, 
+    year, 
+    CASE 
+        WHEN price < 20000 THEN 'basso'
+        WHEN price BETWEEN 20000 AND 50000 THEN 'medio'
+        ELSE 'alto'
+    END AS fascia,
+    COUNT(*) AS numero_macchine,
+    AVG(daysonmarket) AS avg_daysonmarket
 FROM dataset
-GROUP BY city, year
-ORDER BY city, year
+GROUP BY city, year, 
+    CASE 
+        WHEN price < 20000 THEN 'basso'
+        WHEN price BETWEEN 20000 AND 50000 THEN 'medio'
+        ELSE 'alto'
+    END
 """
 
-final_report = spark.sql(query_completa)
+final_report = spark.sql(query)
+fina = final_report.withColumn("avg_price", spark_round(col("avg_price"), 2))
 final_report.show()
 
