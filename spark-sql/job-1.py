@@ -9,7 +9,7 @@ USER = os.getenv("USER")
 
 spark = SparkSession.builder \
     .config("spark.driver.host", "localhost") \
-    .appName("job-1") \
+    .appName("spark-sql#job-1") \
     .getOrCreate()
 
 df = spark.read \
