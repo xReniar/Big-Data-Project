@@ -4,5 +4,5 @@
 #hdfs dfs -rm -r -f /user/$USER/spark-core/$1
 
 $SPARK_HOME/bin/spark-submit \
-    --master local[6] \
+    --master local[*] \
     "$1".py
