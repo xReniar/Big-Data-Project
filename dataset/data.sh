@@ -13,7 +13,7 @@ if [ ! -f "data/data_cleaned.csv" ]; then
 
     # data cleaning
     $SPARK_HOME/bin/spark-submit \
-        --master local \
+        --master local[6] \
         clean_data.py
 
     # put cleaned dataset in hdfs
