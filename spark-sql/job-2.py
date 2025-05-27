@@ -2,7 +2,7 @@
 
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, round as spark_round, concat_ws, array, split
-from pyspark.sql.types import StructType, StructField, StringType, LongType, DoubleType, ArrayType, IntegerType
+from pyspark.sql.types import StructType, StructField, StringType, DoubleType, ArrayType, IntegerType
 import os
 
 
@@ -13,16 +13,25 @@ spark = SparkSession.builder \
     .appName("spark-sql#job-2") \
     .getOrCreate()
 
+schema = StructType([
+    StructField(name="city", dataType=StringType(), nullable=True),
+    StructField(name="daysonmarket", dataType=IntegerType(), nullable=True),
+    StructField(name="description", dataType=StringType(), nullable=True),
+    StructField(name="engine_displacement", dataType=DoubleType(), nullable=True),
+    StructField(name="horsepower", dataType=DoubleType(), nullable=True),
+    StructField(name="make_name", dataType=StringType(), nullable=True),
+    StructField(name="model_name", dataType=StringType(), nullable=True),
+    StructField(name="price", dataType=DoubleType(), nullable=True),
+    StructField(name="year", dataType=IntegerType(), nullable=True)
+])
+
 df = spark.read \
-    .option("header", True) \
-    .csv(f"/user/{USER}/data/data_cleaned.csv") \
+    .csv(f"/user/{USER}/data/data_cleaned.csv", schema=schema) \
     .select("city", "daysonmarket", "description", "price", "year", "model_name")
 
 df = df.filter(
     col("daysonmarket").rlike("^[0-9]+$")
-).withColumn("daysonmarket", col("daysonmarket").cast(IntegerType()))
-
-df.createOrReplaceTempView("dataset")
+).createOrReplaceTempView("dataset")
 
 query = """
 SELECT 
@@ -82,20 +91,13 @@ schema = StructType([
     StructField("city", StringType(), False),
     StructField("year", StringType(), False),
     StructField("fascia", StringType(), False),
-    StructField("numero_macchine", LongType(), False),
+    StructField("num_macchine", IntegerType(), False),
     StructField("avg_daysonmarket", DoubleType(), False),
     StructField("top_3_words", ArrayType(StringType()), False)
 ])
 
 final_result_df = spark.createDataFrame(processed_rdd, schema)
 final_result_df = final_result_df.withColumn("top_3_words", concat_ws(",", col("top_3_words")))
-
-'''
-final_result_df.coalesce(1).write \
-    .mode("overwrite") \
-    .option("header", True) \
-    .csv(f"/user/{USER}/spark-sql/job-2")
-'''
 
 final_result_df.show(n = 10)
 spark.stop()
