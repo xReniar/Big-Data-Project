@@ -10,3 +10,16 @@ spark = SparkSession.builder \
     .getOrCreate()
 
 rdd = spark.sparkContext.textFile(f"/user/{USER}/data/data_cleaned.csv")
+
+# read file and adjust datatypes
+processed_RDD = rdd \
+    .map(f=lambda line: line.split(",")) \
+    .map(f=lambda x: (x[5], x[6], x[7], x[8])) \
+    .map(f=lambda x: (x[0], x[1], float(x[2]), int(x[3])))
+
+processed_RDD = processed_RDD.map(f=lambda line: ((line[0], line[1]), (line[2], line[3])))
+
+reduced = processed_RDD.reduceByKey(lambda a, b: (a[0] + b[0], a[1] + b[1]))
+
+for x in reduced.take(5):
+    print(x)
