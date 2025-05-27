@@ -19,7 +19,7 @@ processed_RDD = rdd \
 
 processed_RDD = processed_RDD.map(f=lambda line: ((line[0], line[1]), (line[2], line[3])))
 
-reduced = processed_RDD.reduceByKey(lambda a, b: (a[0] + b[0], a[1] + b[1]))
+grouped = processed_RDD.groupByKey()
 
-for x in reduced.take(5):
+for x in grouped.take(5):
     print(x)
