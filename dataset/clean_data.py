@@ -44,7 +44,7 @@ df = df.filter(
  .withColumn("year", col("year").cast(IntegerType()))
 
 df.coalesce(1).write \
-    .option("header", True) \
+    .option("header", False) \
     .mode("append") \
     .csv(f"file://{ROOT_DIR}/dataset/data")
 
