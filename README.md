@@ -8,7 +8,7 @@ Tests were made with:
 - [Hadoop 3.4.1](https://www.apache.org/dyn/closer.cgi/hadoop/common/hadoop-3.4.1/hadoop-3.4.1.tar.gz)
 - [Spark 3.5.5](https://www.apache.org/dyn/closer.lua/spark/spark-3.5.5/spark-3.5.5-bin-hadoop3.tgz)
 
-## Setup environment (For development only)
+## Setup environment
 This project makes use of `Hadoop` and `Spark` so make sure to install them first, after installing set the env variabiles. In my case I get the following output:
 ```bash
 echo $JAVA_HOME
@@ -21,7 +21,7 @@ echo $SPARK_HOME
 # /home/rainer/spark-3.5.5-bin-hadoop3
 ```
 
-Then create a virtual environment:
+Then create a virtual environment (For development only):
 ```bash
 python -m venv venv
 source venv/bin/activate
