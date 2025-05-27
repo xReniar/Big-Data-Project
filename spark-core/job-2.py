@@ -10,3 +10,6 @@ spark = SparkSession.builder \
     .getOrCreate()
 
 rdd = spark.sparkContext.textFile(f"/user/{USER}/data/data_cleaned.csv")
+
+processed_RDD = rdd \
+    .map(f=lambda line: line.split(","))
