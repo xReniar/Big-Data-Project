@@ -27,7 +27,7 @@ schema = StructType([
 
 df = spark.read \
     .csv(f"/user/{USER}/data/data_cleaned.csv", schema=schema) \
-    .select("city", "daysonmarket", "description", "price", "year", "model_name")
+    .select("city", "daysonmarket", "description", "price", "year")
 
 df = df.filter(
     col("daysonmarket").rlike("^[0-9]+$")
