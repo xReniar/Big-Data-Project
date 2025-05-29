@@ -2,10 +2,15 @@
 
 from pyspark.sql import SparkSession
 import os
+import argparse
 
-USER = os.getenv("USER")
+
 ROOT_DIR = os.getenv("ROOT_DIR")
 
+parser = argparse.ArgumentParser()
+parser.add_argument("-input", type=str, help="Path to input file")
+parser.add_argument("-output", type=str, help="Path to output folder")
+args = parser.parse_args()
 
 def group_by_price(x):
     if x > 50000:
@@ -31,7 +36,7 @@ spark = SparkSession.builder \
     .appName("spark-core#job-2") \
     .getOrCreate()
 
-rdd = spark.sparkContext.textFile(f"/user/{USER}/data/data_cleaned.csv")
+rdd = spark.sparkContext.textFile(args.input)
 
 processed_RDD = rdd \
     .map(f=lambda line: line.split(",")) \
@@ -53,4 +58,4 @@ processed_RDD = rdd \
         )
     )
 
-processed_RDD.coalesce(1).saveAsTextFile(f"file:///{ROOT_DIR}/spark-core/job-2-result")
+processed_RDD.coalesce(1).saveAsTextFile(args.output)

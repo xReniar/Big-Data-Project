@@ -3,10 +3,13 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, round as spark_round, concat_ws, array, split
 from pyspark.sql.types import StructType, StructField, StringType, DoubleType, ArrayType, IntegerType
-import os
+import argparse
 
 
-USER = os.getenv("USER")
+parser = argparse.ArgumentParser()
+parser.add_argument("-input", type=str, help="Path to input file")
+parser.add_argument("-output", type=str, help="Path to output folder")
+args = parser.parse_args()
 
 def process_row(row):
     city = row['city']
@@ -45,7 +48,7 @@ schema = StructType([
 ])
 
 df = spark.read \
-    .csv(f"/user/{USER}/data/data_cleaned.csv", schema=schema) \
+    .csv(args.input, schema=schema) \
     .select("city", "daysonmarket", "description", "price", "year")
 
 df = df.filter(
@@ -99,5 +102,10 @@ schema = StructType([
 final_result_df = spark.createDataFrame(processed_rdd, schema)
 final_result_df = final_result_df.withColumn("top_3_words", concat_ws(",", col("top_3_words")))
 
-final_result_df.show(n = 10)
+final_result_df.coalesce(1).write \
+    .option("header", False) \
+    .mode("append") \
+    .csv(args.output)
+
+#final_result_df.show(n = 10)
 spark.stop()

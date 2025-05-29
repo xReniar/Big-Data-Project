@@ -2,15 +2,21 @@
 
 from pyspark.sql import SparkSession
 import os
+import argparse
 
-USER = os.getenv("USER")
+
 ROOT_DIR = os.getenv("ROOT_DIR")
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-input", type=str, help="Path to input file")
+parser.add_argument("-output", type=str, help="Path to output folder")
+args = parser.parse_args()
 
 spark = SparkSession.builder \
     .appName("spark-core#job-1") \
     .getOrCreate()
 
-rdd = spark.sparkContext.textFile(f"/user/{USER}/data/data_cleaned.csv")
+rdd = spark.sparkContext.textFile(args.input)
 
 # read file and adjust datatypes
 processed_RDD = rdd \
@@ -36,4 +42,4 @@ processed_RDD = rdd \
         sorted(list(x[1][4]))        # years
     ))
 
-processed_RDD.coalesce(1).saveAsTextFile(f"file:///{ROOT_DIR}/spark-core/job-1-result")
+processed_RDD.coalesce(1).saveAsTextFile(args.output)
