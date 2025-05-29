@@ -35,11 +35,15 @@ To start `Hadoop` use `setup.sh`:
 ```bash
 source setup.sh
 ```
-Then download dataset using `data.sh`, this will put the cleaned dataset in HDFS and generate portions:
+Then download dataset using `download.sh`, clean it and put it in HDFS with `generate_data.sh` :
 ```bash
 cd dataset
-bash data.sh
+bash download.sh
+bash generate_data.sh
 ```
+> [!NOTE]
+> If `data` folder containing `data_cleaned.csv` already exists just run `generate_data.sh`, make sure to execute it inside `dataset` folder.
+
 
 ## Map-Reduce
 
