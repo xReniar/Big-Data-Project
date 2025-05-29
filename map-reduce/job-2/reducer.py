@@ -3,55 +3,50 @@
 import sys
 
 
-def emit_result(key:str, obj: dict):
-    num_car = obj["num_car"]
-    daysonmarket = obj["daysonmarket"]
-    word_dict:dict = group[key]["word_count"]
+def emit_result(
+    key: str,
+    tot_car: int,
+    tot_daysonmarket: int,
+    word_count: dict
+) -> None:
+    word_dict = dict(sorted(word_count.items(), key=lambda item: item[1], reverse=True))
+    top_3_words = list(map(lambda x: x[0], word_dict.items()))[:3]
 
-    word_dict = dict(sorted(word_dict.items(), key=lambda item: item[1], reverse=True))
-    top_3_words = list(map(lambda x: x[0], word_dict))[:3]
-
-    avg_days = round(daysonmarket / num_car, 2)
+    if tot_car == 0:
+        avg_days = 0
+    else:
+        avg_days = round(tot_daysonmarket / tot_car, 2)
 
     key = key.replace("::","\t")
 
-    print(f"{key}\t{num_car}\t{avg_days}\t{top_3_words}")
+    print(f"{key}\t{tot_car}\t{avg_days}\t{top_3_words}")
 
-group = {}
-prev_key = None
+word_count = {}
+current_key = None
+tot_car = 0
+tot_daysonmarket = 0
 
 for line in sys.stdin:
     line = line.strip()
     key, value = line.split("\t")
     counter, daysonmarket, description = value.split("::", 2)
 
-    counter = int(counter)
-    daysonmarket = int(daysonmarket)
+    if key != current_key:
+        emit_result(key, tot_car, tot_daysonmarket, word_count)
+        word_count = {}
+        tot_car = 0
+        tot_daysonmarket = 0
+
+    tot_car += int(counter)
+    tot_daysonmarket += int(daysonmarket)
 
     description = description.strip("[]")
     words = description.split(",") if description else []
 
-    '''
-
-    if key not in group:
-        group[key] = dict(
-            num_car = 0,
-            daysonmarket = 0,
-            word_count = {}
-        )
-        if prev_key != None:
-            emit_result(prev_key, group[prev_key])
-            del group[prev_key]
-
-
-    group[key]["num_car"] += counter
-    group[key]["daysonmarket"] += daysonmarket
-    
     for word in words:
-        if word not in group[key]:
-            group[key]["word_count"][word] = 0
+        if word not in word_count:
+            word_count[word] = 1
         else:
-            group[key]["word_count"][word] += 1
+            word_count[word] += 1
 
-    prev_key = key
-    '''
+    current_key = key
