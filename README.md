@@ -45,4 +45,25 @@ bash generate_data.sh
 > If `data` folder containing `data_cleaned.csv` already exists just run `generate_data.sh`, make sure to execute it inside `dataset` folder.
 
 ## Run scripts
-Each folder contains a `run.sh`, to execute
+Each folder contains a `run.sh`, execute it by passing the job name as a parameter:
+```bash
+# example for spark-core
+cd spark-core
+bash run.sh job-1
+```
+
+Results are saved in HDFS, the structure of the directory in the HDFS is show below:
+```bash
+.
+└── user
+    └── $USER
+        ├── data
+        │   ├── data_cleaned.csv
+        │   └── ...
+        ├── map-reduce
+        │   └── *
+        ├── spark-core
+        │   └── *
+        └── spark-sql
+            └── *
+```
