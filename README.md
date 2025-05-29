@@ -53,11 +53,13 @@ $HADOOP_HOME/sbin/stop-dfs.sh
 Each folder contains a `run.sh`, execute it by passing the job name as a parameter:
 ```bash
 # example for spark-core
+
 cd spark-core
 bash run.sh job-1
+# after this a "spark-core/job-1" folder will appear in HDFS
 ```
 
-Results are saved in HDFS, the structure of the directory in the HDFS is show below:
+Results are saved in HDFS, the structure of the directory in the HDFS is shown below:
 ```bash
 .
 └── user
