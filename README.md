@@ -43,6 +43,11 @@ bash generate_data.sh
 ```
 > [!NOTE]
 > If `data` folder containing `data_cleaned.csv` already exists just run `generate_data.sh`, make sure to execute it inside `dataset` folder.
+- `generate_data.sh` will clean the original dataset and create portions of the cleaned dataset. The portions are passed with the `--fractions` flag, to create more datasets modify `line:21` of `generate_data.sh`. After the execution a `data` folder will be created inside `dataset`, this contains the `cleaned_data.csv` that will be reused in case `setup.sh` will be run executed again.
+- To stop `hadoop` just run:
+```bash
+$HADOOP_HOME/sbin/stop-dfs.sh
+```
 
 ## Run scripts
 Each folder contains a `run.sh`, execute it by passing the job name as a parameter:
