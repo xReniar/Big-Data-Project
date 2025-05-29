@@ -1,4 +1,4 @@
-# Big Data Project
+# US-Used-Cars dataset analysis
 The dataset that's been used is the [US Used Cards](https://www.kaggle.com/datasets/ananaymital/us-used-cars-dataset) dataset, with about 3 million records where each record has 66 columns.
 
 Tests were made with:
