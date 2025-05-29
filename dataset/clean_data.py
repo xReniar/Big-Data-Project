@@ -14,6 +14,7 @@ def clean_value(val):
     return val
 
 ROOT_DIR = os.getenv("ROOT_DIR")
+USER = os.getenv("USER")
 spark = SparkSession.builder.appName("data-cleaning").getOrCreate()
 
 clean_udf = udf(clean_value, StringType())
@@ -47,5 +48,12 @@ df.coalesce(1).write \
     .option("header", False) \
     .mode("append") \
     .csv(f"file://{ROOT_DIR}/dataset/data")
+
+'''
+df.coalesce(1).write \
+    .option("header", False) \
+    .mode("append") \
+    .csv(f"/user/{USER}/data")
+'''
 
 spark.stop()
