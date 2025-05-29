@@ -8,6 +8,25 @@ import os
 
 USER = os.getenv("USER")
 
+def process_row(row):
+    city = row['city']
+    year = row['year']
+    fascia = row['fascia']
+    numero_macchine = row['numero_macchine']
+    avg_daysonmarket = row['avg_daysonmarket']
+    descriptions:list[str] = row['descriptions_list']
+
+    # count words
+    word_counts = {}
+    for word in descriptions:
+        if len(word) > 0 and word.isalpha():
+            word_counts[word] = word_counts.get(word, 0) + 1
+
+    sorted_words = sorted(word_counts.items(), key=lambda x: (x[1]), reverse=True)
+    top_3 = list(map(lambda x: x[0], sorted_words[:3]))
+
+    return (city, year, fascia, numero_macchine, avg_daysonmarket, top_3)
+
 spark = SparkSession.builder \
     .config("spark.driver.host", "localhost") \
     .appName("spark-sql#job-2") \
@@ -65,25 +84,6 @@ final_report = final_report \
 final_report = final_report.withColumn("descriptions_list", split(col("descriptions_list")[0], " "))
 
 df_rdd = final_report.select("city", "year", "fascia", "numero_macchine", "avg_daysonmarket", "descriptions_list").rdd
-
-def process_row(row):
-    city = row['city']
-    year = row['year']
-    fascia = row['fascia']
-    numero_macchine = row['numero_macchine']
-    avg_daysonmarket = row['avg_daysonmarket']
-    descriptions:list[str] = row['descriptions_list']
-
-    # count words
-    word_counts = {}
-    for word in descriptions:
-        if len(word) > 0 and word.isalpha():
-            word_counts[word] = word_counts.get(word, 0) + 1
-
-    sorted_words = sorted(word_counts.items(), key=lambda x: (x[1]), reverse=True)
-    top_3 = list(map(lambda x: x[0], sorted_words[:3]))
-
-    return (city, year, fascia, numero_macchine, avg_daysonmarket, top_3)
 
 processed_rdd = df_rdd.map(process_row)
 
