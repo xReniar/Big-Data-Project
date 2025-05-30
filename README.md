@@ -50,7 +50,7 @@ $HADOOP_HOME/sbin/stop-dfs.sh
 ```
 
 ## Run scripts
-Each folder contains a `run.sh`, execute it by passing the job name as a parameter:
+Each folder contains a `run.sh`. Pass the path of the input file with `-input` then run the script:
 ```bash
 # example for spark-core
 
