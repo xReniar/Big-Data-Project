@@ -53,10 +53,12 @@ model_stats = model_stats \
     .withColumn("avg_price", spark_round(col("avg_price"), 2)) \
     .withColumn("years_list", concat_ws(",", col("years_list")))
 
+'''
 model_stats.write \
     .option("header", False) \
     .mode("append") \
     .csv(args.output)
+'''
 
 model_stats.show(n=10)
 
