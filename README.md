@@ -76,3 +76,10 @@ Results are saved in HDFS, the structure of the directory in the HDFS is shown b
         └── spark-sql
             └── *
 ```
+
+## Benchmark
+To see the execution time of each tool run:
+```bash
+bash experiments.sh
+```
+This will create a `log` folder with the output and an image for each job showing the execution times.
