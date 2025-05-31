@@ -44,5 +44,6 @@ processed_RDD = rdd \
 
 for line in processed_RDD.take(10):
     print(line)
-    
-processed_RDD.saveAsTextFile(args.output)
+
+spark.stop()
+#processed_RDD.saveAsTextFile(args.output)
