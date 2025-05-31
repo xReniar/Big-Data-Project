@@ -8,3 +8,5 @@ hadoop jar $HADOOP_HOME/streaming/hadoop-streaming-3.4.1.jar \
     -reducer $1/reducer.py \
     -input /user/$USER/data/$2.csv \
     -output /user/$USER/map-reduce/$1/
+
+hdfs dfs -cat /user/$USER/map-reduce/$1/part-* | head -n 10
