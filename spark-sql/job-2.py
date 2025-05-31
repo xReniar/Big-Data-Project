@@ -102,10 +102,12 @@ schema = StructType([
 final_result_df = spark.createDataFrame(processed_rdd, schema)
 final_result_df = final_result_df.withColumn("top_3_words", concat_ws(",", col("top_3_words")))
 
+'''
 final_result_df.write \
     .option("header", False) \
     .mode("append") \
     .csv(args.output)
+'''
 
 final_result_df.show(n = 10)
 
