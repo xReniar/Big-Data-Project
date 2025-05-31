@@ -42,4 +42,7 @@ processed_RDD = rdd \
         sorted(list(x[1][4]))        # years
     ))
 
-processed_RDD.coalesce(1).saveAsTextFile(args.output)
+for line in processed_RDD.take(10):
+    print(line)
+    
+processed_RDD.saveAsTextFile(args.output)
