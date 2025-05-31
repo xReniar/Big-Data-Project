@@ -21,7 +21,7 @@ echo $SPARK_HOME
 # /home/rainer/spark-3.5.5-bin-hadoop3
 ```
 
-Then create a virtual environment (For development only):
+Then create a virtual environment (Required only for `benchmark.py`):
 ```bash
 python -m venv venv
 source venv/bin/activate
@@ -50,12 +50,14 @@ $HADOOP_HOME/sbin/stop-dfs.sh
 ```
 
 ## Run scripts
-Each folder contains a `run.sh`. Pass the path of the input file with `-input` then run the script:
+Each folder contains a `run.sh`, it takes 2 arguments:
+- the name of the job
+- the name of the dataset
 ```bash
-# example for spark-core
+# example for spark-core using data-20.0%
 
 cd spark-core
-bash run.sh job-1
+bash run.sh job-1 data-20.0%
 # after this a "spark-core/job-1" folder will appear in HDFS
 ```
 
