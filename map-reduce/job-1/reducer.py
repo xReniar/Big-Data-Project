@@ -6,9 +6,7 @@ import sys
 group = {}
 
 for line in sys.stdin:
-    line = line.strip()
-
-    make_name, model_name, count, price, year = line.split("\t")
+    make_name, model_name, count, price, year = line.strip().split("\t")
 
     count = int(count)
     price = float(price)
