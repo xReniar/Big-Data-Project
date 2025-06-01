@@ -13,8 +13,7 @@ def price_category(price: str):
         return "basso"
 
 for line in sys.stdin:
-    line = line.strip()
-    city, daysonmarket, description, _, _, _, _, price, year = line.split(",")
+    city, daysonmarket, description, _, _, _, _, price, year = line.strip().split(",")
 
     try:
         daysonmarket = int(daysonmarket)

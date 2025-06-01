@@ -27,8 +27,7 @@ tot_car = 0
 tot_daysonmarket = 0
 
 for line in sys.stdin:
-    line = line.strip()
-    key, value = line.split("\t")
+    key, value = line.strip().split("\t")
     counter, daysonmarket, description = value.split("::", 2)
 
     if key != current_key:
