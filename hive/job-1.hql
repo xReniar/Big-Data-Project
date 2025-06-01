@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS model_statistics;
+DROP TABLE IF EXISTS used_cars;
 
-CREATE EXTERNAL TABLE model_statistics (
+CREATE TABLE used_cars (
     city STRING,
     daysonmarket INT,
     description STRING,
@@ -12,8 +12,9 @@ CREATE EXTERNAL TABLE model_statistics (
     year INT
 )
 ROW FORMAT DELIMITED
-FIELDS TERMINATED BY ','
-LOCATION '/user/rainer/data';
+FIELDS TERMINATED BY ',';
+
+LOAD DATA INPATH '${hivevar:input_path}' OVERWRITE INTO TABLE used_cars;
 
 SELECT 
     make_name,
@@ -23,8 +24,8 @@ SELECT
     MAX(price) as max_price,
     AVG(price) as avg_price,
     COLLECT_SET(year) as years_list
-FROM model_statistics
+FROM used_cars
 GROUP BY make_name, model_name
 LIMIT 10;
 
-DROP TABLE model_statistics;
+DROP TABLE used_cars;
