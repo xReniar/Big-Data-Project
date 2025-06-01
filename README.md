@@ -12,13 +12,13 @@ Tests were made with:
 This project makes use of `Hadoop` and `Spark` so make sure to install them first, after installing set the env variabiles. In my case I get the following output:
 ```bash
 echo $JAVA_HOME
-# /usr/lib/jvm/java-1.11.0-openjdk-amd64
+> /usr/lib/jvm/java-1.11.0-openjdk-amd64
 
 echo $HADOOP_HOME
-# /home/rainer/hadoop-3.4.1
+> /home/rainer/hadoop-3.4.1
 
 echo $SPARK_HOME
-# /home/rainer/spark-3.5.5-bin-hadoop3
+> /home/rainer/spark-3.5.5-bin-hadoop3
 ```
 
 Then create a virtual environment (Required only for `benchmark.py`):
