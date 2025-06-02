@@ -3,7 +3,7 @@ The dataset that's been used is the [US Used Cards](https://www.kaggle.com/datas
 
 Tests were made with:
 - Linux Ubuntu 22.04
-- i5-10210U 1.60GHz, 8GB RAM
+- AMD Ryzen 7 5800X 8-Core Processor, 32GB RAM
 - Java 11
 - [Hadoop 3.4.1](https://www.apache.org/dyn/closer.cgi/hadoop/common/hadoop-3.4.1/hadoop-3.4.1.tar.gz)
 - [Spark 3.5.5](https://www.apache.org/dyn/closer.lua/spark/spark-3.5.5/spark-3.5.5-bin-hadoop3.tgz)
