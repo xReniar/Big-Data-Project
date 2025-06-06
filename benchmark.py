@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 
 parser = argparse.ArgumentParser()
 parser.add_argument("job", type=str, choices=["job-1", "job-2"], help="Job name")
+parser.add_argument("master", type=str, choices=["local[*]", "yarn"], help="Master type")
 parser.add_argument("--fractions", type=str, help="Fractions of dataset to use (es: 0.01 0.2 0.5 0.7)")
 args = parser.parse_args()
 
@@ -20,7 +21,7 @@ for tool in tools:
     for fraction in fractions:
         start = time.time()
         process = subprocess.run(
-            ["bash", "run.sh", args.job, fraction],
+            ["bash", "run.sh", args.job, fraction, args.master],
             cwd=tool,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
