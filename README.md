@@ -53,11 +53,12 @@ $HADOOP_HOME/sbin/stop-dfs.sh
 Each folder contains a `run.sh`, it takes 2 arguments:
 - the name of the job
 - the name of the dataset
+- the `master` type, can be `yarn` or `local[*]`
 ```bash
 # example for spark-core using data-20.0%
 
 cd spark-core
-bash run.sh job-1 data-20.0%
+bash run.sh job-1 data-20.0% local[*]
 # after this a "spark-core/job-1" folder will appear in HDFS
 ```
 
