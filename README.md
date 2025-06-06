@@ -39,7 +39,7 @@ Then download dataset using `download.sh`, clean it and put it in HDFS with `gen
 ```bash
 cd dataset
 bash download.sh
-bash generate_data.sh
+bash generate_data.sh local[*]
 ```
 > [!NOTE]
 > If `data` folder containing `data_cleaned.csv` already exists just run `generate_data.sh`, make sure to execute it inside `dataset` folder.
