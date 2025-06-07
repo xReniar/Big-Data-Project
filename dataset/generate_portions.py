@@ -31,7 +31,7 @@ for fraction in fractions:
         .sample(withReplacement=False, fraction=fraction)
     df.coalesce(1).write.csv(f"data/data-{fraction * 100}%")
     os.system(f"hdfs dfs -mv data/data-{fraction * 100}%/part-*.csv data/data-{fraction * 100}%.csv")
-    os.system(f"hdfs dfs -get data/data-{fraction * 100}%.csv data")
+    #os.system(f"hdfs dfs -get data/data-{fraction * 100}%.csv data")
     os.system(f"hdfs dfs -rm -r -f data/data-{fraction * 100}%")
 
 spark.stop()
