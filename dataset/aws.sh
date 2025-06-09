@@ -1,5 +1,7 @@
 #!/bin/bash
 
+hdfs dfs -mkdir -p /user/hadoop/data
+
 mv data-1.0%.csv data-1.csv
 hdfs dfs -put data-1.csv /user/hadoop/data
 hdfs dfs -mv data/data-1.csv data/data-1.0%.csv
