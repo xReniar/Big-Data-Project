@@ -84,3 +84,20 @@ To see the execution time of each tool run:
 bash experiments.sh
 ```
 This will create a `log` folder with the output and an image for each job showing the execution times.
+
+# Using AWS
+When using `aws` compress all the `.csv` files into one `.zip` and send it using `scp`:
+```bash
+# get files from hdfs
+cd data
+hdfs dfs -get /user/rainer/data/data-1.0%.csv $pwd
+hdfs dfs -get /user/rainer/data/data-20.0%.csv $pwd
+hdfs dfs -get /user/rainer/data/data-50.0%.csv $pwd
+hdfs dfs -get /user/rainer/data/data-70.0%.csv $pwd
+
+# compress
+zip -r files.zip *.csv
+
+# send to cluster via scp
+scp files.zip hadoop@{aws-endpoint}:/path/to/put/files.zip
+```
