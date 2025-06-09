@@ -79,9 +79,10 @@ Results are saved in HDFS, the structure of the directory in the HDFS is shown b
 ```
 
 ## Benchmark
-To see the execution time of each tool run:
+To see the execution time of each tool run `experiments.sh` by passing `local[*]` or `yarn`:
 ```bash
-bash experiments.sh
+bash experiments.sh local[*] # on local device
+bash experiments.sh yarn     # on a cluster
 ```
 This will create a `log` folder with the output and an image for each job showing the execution times.
 
@@ -101,4 +102,24 @@ zip -r files.zip *.csv
 
 # send to cluster via scp
 scp files.zip hadoop@{aws-endpoint}:/path/to/put/files.zip
+```
+
+After this use `aws.sh` located in `./dataset` to upload the datasets in `hdfs`. Suppose the structure of the project in `aws` looks like this:
+```bash
+.
+├── dataset
+│   ├── aws.sh
+│   ├── ....
+│   └── data
+│       ├── data-1.0%.csv
+│       ├── data-20.0%.csv
+│       ├── data-50.0%.csv
+│       ├── data-70.0%.csv
+│       └── data_cleaned.csv
+└── ...
+```
+Then run:
+```bash
+cd data
+bash aws.sh
 ```
