@@ -120,6 +120,5 @@ After this use `aws.sh` located in `./dataset` to upload the datasets in `hdfs`.
 ```
 Then run:
 ```bash
-cd data
 bash aws.sh
 ```
