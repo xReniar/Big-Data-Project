@@ -16,13 +16,17 @@ for line in sys.stdin:
     if key not in group:
         group[key] = dict(
             num_car = 0,
-            prices = [],
-            years = []
+            price_sum = 0,
+            price_min = float("inf"),
+            price_max = float("-inf"),
+            years = set()
         )
 
     group[key]["num_car"] += count
-    group[key]["prices"] += [price]
-    group[key]["years"] += [year]
+    group[key]["price_sum"] += price
+    group[key]["price_min"] = min(price, group[key]["price_min"])
+    group[key]["price_max"] = max(price, group[key]["price_max"])
+    group[key]["years"].add(year)
 
 for key in group.keys():
     obj = group[key]
@@ -30,9 +34,9 @@ for key in group.keys():
     make_name, model_name = key.split("\t")
 
     num_cars = obj["num_car"]
-    min_value = min(obj["prices"])
-    max_value = max(obj["prices"])
-    avg_value = round(sum(obj["prices"]) / num_cars, 2)
+    avg_value = round(obj["price_sum"] / num_cars, 2)
     years = sorted(set(obj["years"]))
+    min_value = obj["price_min"]
+    max_value = obj["price_max"]
 
     print(f"{make_name}\t{model_name}\t{num_cars}\t{min_value}\t{max_value}\t{avg_value}\t{years}")
